@@ -3,6 +3,11 @@ import { ref } from 'vue'
 import { RouterLink, RouterView } from 'vue-router'
 import navComponent from '@/components/base/nav.vue'
 import MenuComponent from '@/components/base/sidebar/MenuComponent.vue'
+
+import { useMenuStore } from '@/stores/global.js'
+
+const menuStore = useMenuStore()
+
 const sideBarItems = ref([
   {
     title: 'داشبورد',
@@ -31,9 +36,16 @@ const sideBarItems = ref([
 <template>
   <div>
     <div class="flex w-full">
-      <div>
-        <div class="flex bg-white h-[100vh]" style="box-shadow: 0px 0px 15px #8080805c">
-          <div class="p-2 w-[240px]">
+      <div
+        style="transition: all 0.2s"
+        :class="menuStore.isMenuOpen == true ? 'w-[240px] ' : 'w-[0px]'"
+      >
+        <div
+          class="flex bg-white h-[100vh]"
+          style="box-shadow: 0px 0px 15px #8080805c"
+          :class="menuStore.isMenuOpen == true ? '  ' : 'hidden'"
+        >
+          <div class="p-2 w-full">
             <div class="flex justify-between items-center mt-1 mb-4">
               <div class="mr-2 ml-2">
                 <svg
@@ -83,19 +95,6 @@ const sideBarItems = ref([
               </div>
             </div>
             <MenuComponent :menu-item="sideBarItems" />
-
-            <!-- <li
-              v-for="(item, index) in sideBarItems"
-              :key="index"
-              class="flex m-1 rounded-full hover:bg-slate-100 px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
-            >
-              <span
-                class="w-full hover:text-primary-900 text-gray-300"
-                style="font-size: 15px; font-weight: 400"
-              >
-                {{ item.title }}
-              </span>
-            </li> -->
           </div>
         </div>
       </div>

@@ -5,11 +5,11 @@
       :to="props.item.to ?? ''"
       v-ripple
       :class="{ 'text-primary bg-primary-200 font-bold': $route.path === props.item.to }"
-      class="flex m-1 rounded-full hover:bg-slate-100 px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
+      class="flex m-1 rounded-full px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
     >
       <VIcon v-if="props.item.icon" :icon="props.item.icon" class="me-2" />
       <VIcon v-else icon="mdi-circle-medium" class="me-2" />
-      <span>{{ props.item.title }}</span>
+      <span class="min-w-[200px]">{{ props.item.title }}</span>
     </RouterLink>
     <div
       v-else
