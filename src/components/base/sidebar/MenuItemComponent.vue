@@ -4,23 +4,27 @@
       v-if="!props.item.children || props.item.children.length === 0"
       :to="props.item.to ?? ''"
       v-ripple
-      :class="{ 'text-primary bg-primary-200 font-bold': $route.path === props.item.to }"
+      :class="{ 'text-secondary-700 bg-primary-200 font-bold': $route.path === props.item.to }"
       class="flex m-1 rounded-full px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
     >
-      <VIcon v-if="props.item.icon" :icon="props.item.icon" class="me-2" />
+      <VIcon v-if="props.item.icon" :icon="props.item.icon" class="me-2 text-secondary-900" />
       <VIcon v-else icon="mdi-circle-medium" class="me-2" />
-      <span class="min-w-[200px]">{{ props.item.title }}</span>
+      <span class="min-w-[200px] text-secondary-900">{{ props.item.title }}</span>
     </RouterLink>
     <div
       v-else
       @click="handelShowChild"
       v-ripple
-      :class="{ 'text-primary font-bold': $route.path === props.item.to }"
+      :class="{ 'text-secondary-700 font-bold': $route.path === props.item.to }"
       class="flex m-1 rounded-full hover:bg-slate-100 px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
     >
-      <VIcon :icon="props.item.icon" class="me-2" />
-      <span>{{ props.item.title }}</span>
-      <VIcon icon="mdi-chevron-left" :class="{ rotate: showChild }" class="ms-auto duration-200" />
+      <VIcon :icon="props.item.icon" class="me-2 text-secondary-900" />
+      <span class="text-secondary-900">{{ props.item.title }}</span>
+      <VIcon
+        icon="mdi-chevron-left"
+        :class="{ rotate: showChild }"
+        class="ms-auto text-secondary-900 duration-200"
+      />
     </div>
     <ul ref="childBox" class="box-child text-[13px]" :class="showChild ? 'show' : 'hide'">
       <MenuItemComponent v-for="child in props.item.children" :key="child.title" :item="child" />

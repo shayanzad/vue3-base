@@ -1,5 +1,4 @@
 import { createRouter, createWebHistory } from 'vue-router'
-import HomeView from '../views/HomeView.vue'
 import PaneLayout from '@/layouts/pane-layout.vue'
 import Auth from '@/layouts/auth-layout.vue'
 const router = createRouter({
@@ -11,10 +10,10 @@ const router = createRouter({
       component: PaneLayout,
       children: [
         {
-          path: '',
-          name: 'Home',
+          path: '/dashboard',
+          name: 'dashboard',
           title: 'داشبورد',
-          component: HomeView,
+          component: () => import('../views/dashboard/index.vue'),
         },
         {
           path: '/about',

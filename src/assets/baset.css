@@ -77,3 +77,8 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+.boxWidgets {
+  background-color: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 5px rgba(128, 128, 128, 0.253);
+}
