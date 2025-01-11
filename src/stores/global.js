@@ -2,7 +2,8 @@ import { defineStore } from 'pinia'
 
 export const useMenuStore = defineStore('menu', {
   state: () => ({
-    isMenuOpen: false, // وضعیت منو
+    isMenuOpen: true, // وضعیت منو
+    isDrawerSettingsOpen: false, // وضعیت منو
   }),
   actions: {
     toggleMenu() {
@@ -13,6 +14,13 @@ export const useMenuStore = defineStore('menu', {
     },
     closeMenu() {
       this.isMenuOpen = false
+    },
+
+    openDrawerSettings() {
+      this.isDrawerSettingsOpen = true
+    },
+    closeDrawerSettings() {
+      this.isDrawerSettingsOpen = false
     },
   },
 })

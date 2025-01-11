@@ -11,16 +11,20 @@
         <div class="text-center flex">
           <DropMenue title="پروفایل کاربر" count="10" icon="bell-ring-outline" />
           <DropMenue title="صندوق ورودی" count="25" icon="inbox-arrow-down" />
-          <DropMenue />
+          <!-- <v-icon @click="toggleDrawerSettings">mdi-account</v-icon> -->
+          <v-avatar @click="goToProfile" size="large" class="cursor-pointer">
+            <v-icon size="30" :icon="`mdi-account`"></v-icon>
+          </v-avatar>
         </div>
       </div>
     </nav>
   </div>
 </template>
 <script setup>
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import DropMenue from './dropMenu.vue'
 import { ref } from 'vue'
+const router = useRouter()
 
 import { useMenuStore } from '@/stores/global.js'
 
@@ -32,7 +36,16 @@ const togglemenuBtn = () => {
   } else {
     menuStore.openMenu()
   }
-  console.log(menuStore.isMenuOpen)
 }
-const menu = ref(false)
+const goToProfile = () => {
+  router.push('profile')
+}
+const toggleDrawerSettings = () => {
+  console.log(menuStore.isDrawerSettingsOpen)
+  if (menuStore.isDrawerSettingsOpen == true) {
+    menuStore.closeDrawerSettings()
+  } else {
+    menuStore.openDrawerSettings()
+  }
+}
 </script>

@@ -15,11 +15,24 @@ const router = createRouter({
           title: 'داشبورد',
           component: () => import('../views/dashboard/index.vue'),
         },
-        {
-          path: '/about',
-          name: 'about',
 
-          component: () => import('../views/AboutView.vue'),
+        {
+          path: '/profile',
+          name: 'profile',
+          component: () => import('../views/profiles/admin.vue'),
+
+          title: ' ',
+
+          meta: {
+            title: 'پروفایل کاربر',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/stations/list',
+          name: 'stations',
+          component: () => import('../views/stations/list.vue'),
         },
       ],
     },
