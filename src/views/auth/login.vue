@@ -20,15 +20,14 @@
         </div>
       </v-col>
       <v-col cols="12" md="6" class="!p-0 m-0">
-        <div class="flex border justify-start items-center h-[100vh]">
+        <div class="flex border justify-center items-center h-[100vh]">
           <v-form @submit.prevent="onSubmit" class="w-[350px]" ref="loginForm">
             <v-row>
               <v-col><div class="text-primary-900 text-lg">ورود به سامانه</div> </v-col>
               <v-col cols="12">
+                <span class="mb-4" style="font-weight: 500"> نام کاربری </span>
                 <v-text-field
-                  prepend-inner-icon="mdi-account"
-                  label="نام کاربری"
-                  class="w-full"
+                  class="w-full mt-2"
                   variant="outlined"
                   required
                   :rules="[required]"
@@ -37,10 +36,9 @@
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
+                <span class="mb-4" style="font-weight: 500"> کلمه عبور </span>
                 <v-text-field
-                  prepend-inner-icon="mdi-key"
-                  label="کلمه عبور"
-                  class="w-full"
+                  class="w-full mt-2"
                   variant="outlined"
                   required
                   :rules="[required]"

@@ -2,7 +2,7 @@
   <div class="p-2">
     <nav class="flex justify-between items-center">
       <div>
-        <v-btn @click="togglemenuBtn" class="mr-2" icon="mdi-menu"></v-btn>
+        <v-btn @click="togglemenuBtn" class="mr-2" variant="text" icon="mdi-menu"></v-btn>
         <RouterLink to="/" class="mx-2">Home</RouterLink>
         <RouterLink to="/about" class="mx-2">About</RouterLink>
         <RouterLink to="/auth/login" class="mx-2">login</RouterLink>
@@ -38,7 +38,7 @@ const togglemenuBtn = () => {
   }
 }
 const goToProfile = () => {
-  router.push('profile')
+  router.push('/profile')
 }
 const toggleDrawerSettings = () => {
   console.log(menuStore.isDrawerSettingsOpen)

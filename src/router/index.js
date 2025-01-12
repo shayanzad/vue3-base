@@ -33,6 +33,51 @@ const router = createRouter({
           path: '/stations/list',
           name: 'stations',
           component: () => import('../views/stations/list.vue'),
+          meta: {
+            title: 'فهرست ایستگاه ها',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/stations/map',
+          name: 'stationsMap',
+          component: () => import('../views/stations/map.vue'),
+          meta: {
+            title: 'نمایش ایستگاه ها روی نقشه',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/drivers/list',
+          name: 'driversList',
+          component: () => import('../views/drivers/list.vue'),
+          meta: {
+            title: ' فهرست راننده ها',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/turns/list',
+          name: 'turnsList',
+          component: () => import('../views/turns/list.vue'),
+          meta: {
+            title: ' فهرست نوبت ها',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/cars/list',
+          name: 'carsList',
+          component: () => import('../views/cars/list.vue'),
+          meta: {
+            title: ' فهرست ناوگان',
+            guest: true,
+            bredCroump: true,
+          },
         },
       ],
     },

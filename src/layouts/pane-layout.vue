@@ -26,11 +26,11 @@ const sideBarItems = ref([
     to: '',
     icon: 'mdi-office-building',
     children: [
-      {
-        title: 'ثبت ',
-        to: '/branches/list',
-        icon: '',
-      },
+      // {
+      //   title: 'ثبت ',
+      //   to: '/branches/list',
+      //   icon: '',
+      // },
       {
         title: 'فهرست',
         to: '/stations/list',
@@ -38,7 +38,7 @@ const sideBarItems = ref([
       },
       {
         title: 'نقشه',
-        to: '/branches/list',
+        to: '/stations/map',
         icon: '',
       },
     ],
@@ -50,14 +50,14 @@ const sideBarItems = ref([
     children: [
       {
         title: '  فهرست',
-        to: '/branches/list',
+        to: '/drivers/list',
         icon: '',
       },
-      {
-        title: '  ثبت',
-        to: '/branches/list',
-        icon: '',
-      },
+      // {
+      //   title: '  ثبت',
+      //   to: '/branches/list',
+      //   icon: '',
+      // },
     ],
   },
   {
@@ -66,8 +66,8 @@ const sideBarItems = ref([
     icon: 'mdi-format-list-numbered-rtl',
     children: [
       {
-        title: '  فهرست',
-        to: '/branches/list',
+        title: '  فهرست نوبت ها',
+        to: '/turns/list',
         icon: '',
       },
     ],
@@ -78,8 +78,8 @@ const sideBarItems = ref([
     icon: 'mdi-car-search-outline',
     children: [
       {
-        title: '  فهرست',
-        to: '/branches/list',
+        title: 'فهرست ناوگان',
+        to: '/cars/list',
         icon: '',
       },
     ],
@@ -150,7 +150,7 @@ const sideBarItems = ref([
           <div class="px-10 max-w-[1248px] mx-auto">
             <div>
               <div
-                class="mt-5 mb-10 px-6 py-5 rounded-3xl shadowLight bg-withe"
+                class="mt-5 mb-5 px-6 py-5 rounded-3xl shadowLight bg-withe"
                 v-if="route.meta.bredCroump == true"
               >
                 <div class="flex justify-between items-center">

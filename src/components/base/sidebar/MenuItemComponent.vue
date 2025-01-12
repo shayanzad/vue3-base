@@ -22,7 +22,7 @@
       <span class="text-secondary-900">{{ props.item.title }}</span>
       <VIcon
         icon="mdi-chevron-left"
-        :class="{ rotate: showChild }"
+        :class="showChild ? ' rotate-[-90deg]' : ''"
         class="ms-auto text-secondary-900 duration-200"
       />
     </div>
