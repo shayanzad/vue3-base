@@ -10,7 +10,7 @@ const router = createRouter({
       component: PaneLayout,
       children: [
         {
-          path: '/dashboard',
+          path: '/',
           name: 'dashboard',
           title: 'داشبورد',
           component: () => import('../views/dashboard/index.vue'),

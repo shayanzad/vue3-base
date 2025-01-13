@@ -20,22 +20,29 @@
         </div>
       </v-col>
       <v-col cols="12" md="6" class="!p-0 m-0">
-        <div class="flex border justify-center items-center h-[100vh]">
-          <v-form @submit.prevent="onSubmit" class="w-[350px]" ref="loginForm">
+        <div class="flex border justify-center lg:!justify-start items-center h-[100vh]">
+          <v-form @submit.prevent="onSubmit" class="ps-lg-12 ps-md-10 w-[460px]" ref="loginForm">
             <v-row>
-              <v-col><div class="text-primary-900 text-lg">ورود به سامانه</div> </v-col>
-              <v-col cols="12">
+              <v-col>
+                <div class="text-primary-900 text-lg">
+                  <img width="40px" class="mx-0" src="../../assets/images/taxi-svg.svg" />
+                </div>
+                <div class="text-gray-700 text-2xl my-2">صفحه ورود</div>
+                <div class="text-primary-900">داشبورد ادمین سفرگرام</div>
+              </v-col>
+              <v-col cols="12" class="py-0">
                 <span class="mb-4" style="font-weight: 500"> نام کاربری </span>
                 <v-text-field
                   class="w-full mt-2"
                   variant="outlined"
                   required
+                  placeholder="*******0912"
                   :rules="[required]"
                   clearable
                   v-modle="formModel.userName"
                 ></v-text-field>
               </v-col>
-              <v-col cols="12">
+              <v-col cols="12" class="py-0">
                 <span class="mb-4" style="font-weight: 500"> کلمه عبور </span>
                 <v-text-field
                   class="w-full mt-2"
@@ -44,6 +51,7 @@
                   :rules="[required]"
                   clearable
                   v-modle="formModel.password"
+                  placeholder="* * * * * * "
                 ></v-text-field>
               </v-col>
               <v-col cols="12">
@@ -53,7 +61,7 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-btn type="submit" block class="rounded-lg bg-secondary-900 text-withe"
+                <v-btn type="submit" block class="rounded-lg h-[80px] bg-secondary-900 text-withe"
                   >ورود</v-btn
                 >
               </v-col>

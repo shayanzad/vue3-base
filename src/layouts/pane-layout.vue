@@ -17,7 +17,7 @@ const userData = ref({
 const sideBarItems = ref([
   {
     title: 'داشبورد',
-    to: '/dashboard',
+    to: '/',
     icon: 'mdi-view-dashboard',
   },
 

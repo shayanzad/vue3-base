@@ -1,6 +1,6 @@
 /* color palette from <https://github.com/vuejs/theme> */
 :root {
-  --primary-c: 'red';
+  --primary-c: #0000fe;
   --back--all: '#f8fafd';
   --vt-c-white: #ffffff;
   --vt-c-white-soft: #f8f8f8;
@@ -59,6 +59,7 @@
   margin: 0;
   font-weight: normal;
   direction: rtl;
+  font-family: IRANSans;
 }
 
 body {
@@ -88,4 +89,18 @@ body {
 .bredCroumpTitle {
   font-size: 1.125rem !important;
   font-weight: 600 !important;
+}
+.dialogTitle {
+  font-size: 18px;
+  font-weight: 600;
+}
+.v-input--is-focused .v-input__slot {
+  border: 2px solid #005fcc !important;
+  border-bottom-color: rgba(0, 0, 0, 0.38) !important;
+}
+.swal2-title {
+  font-size: 24px !important;
+}
+.swal2-modal {
+  border-radius: 15px !important;
 }
