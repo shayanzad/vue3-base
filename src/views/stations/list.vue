@@ -177,12 +177,12 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field
+            <v-autocomplate
               label="  نام خط *"
               v-model="formModel.line_id"
               variant="outlined"
               density="comfortable"
-            ></v-text-field>
+            ></v-autocomplate>
           </v-col>
           <v-col cols="12" md="12">
             <mapCompnent height="300" @address="jjjjjj" />

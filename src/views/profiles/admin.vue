@@ -14,14 +14,14 @@
               <div class="rounded-full w-[100px] border-4 border-primary-900 bg-withe p-2">
                 <img width="100px" src="../../assets/images/taxi-svg.svg" alt="" />
               </div>
-              <span class="mt-3"> {{ userData.name + ' ' + userData.family }} </span>
-              <span> {{ userData.userName }} </span>
+              <span class="mt-3"> {{ userData.name + ' ' + userData.lastname }} </span>
+              <span> {{ userData.national_code }} </span>
             </div>
           </div>
         </v-col>
         <v-col cols="4" class="mr-auto">
           <div class="flex justify-end">
-            <v-btn class="bg-secondary-700 text-withe rounded-full">
+            <v-btn @click="logOutFunction" class="bg-secondary-700 text-withe rounded-full">
               <span class="mx-2">خروج از حساب کاربری</span>
               <v-icon class="rotate-180">mdi-logout</v-icon>
             </v-btn>
@@ -33,12 +33,26 @@
 </template>
 <script setup>
 import { ref } from 'vue'
-const userData = ref({
-  name: 'شایان  ',
-  family: 'آزادبخت',
-  userName: 'ShayanAzadbakht',
-  national_code: 'ddddddd',
-})
+import { useGlobalStore } from '@/stores/global.js'
+const globalStore = useGlobalStore()
+const defUser = {
+  birthdate: null,
+  id: null,
+  lastname: null,
+  name: null,
+  national_code: null,
+  password: null,
+  phone: null,
+  role: 0,
+}
+const userData = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')) : defUser
+
+import { useRouter } from 'vue-router'
+const router = useRouter()
+
+const logOutFunction = () => {
+  globalStore.logOut(router)
+}
 </script>
 <style>
 .wallpaeper {

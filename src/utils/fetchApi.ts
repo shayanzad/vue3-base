@@ -1,6 +1,6 @@
 import { ofetch, FetchOptions } from "ofetch";
-import { useToast } from "vue-toastification"
 import { ApiResponseInterface } from "../models/ApiResponse.Interface";
+import { useToast } from "vue-toastification"
 const toats = useToast()
 
 export const fetchApi = <T>(url: string, options: FetchOptions = {}): Promise<ApiResponseInterface<T>> => {
@@ -25,7 +25,7 @@ export const fetchApi = <T>(url: string, options: FetchOptions = {}): Promise<Ap
                 location.reload()
             }
             if(response.status === 403) {
-                if(response.url.includes('/v1/rooms/show/')) return                
+                if(response.url.includes('/v1/rooms/show/')) return
                 toats.error('دسترسی ندارید')
                 return
             }

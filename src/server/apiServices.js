@@ -1,5 +1,5 @@
 import axios from 'axios'
-const BASEURL = 'http://192.168.42.109:8085/api'
+const BASEURL = 'https://safargram.liara.run/api'
 const apiClient = axios.create({
   baseURL: BASEURL,
   headers: {

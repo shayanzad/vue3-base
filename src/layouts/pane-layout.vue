@@ -1,11 +1,11 @@
 <script setup>
 import { ref } from 'vue'
-import { RouterLink, RouterView, useRouter, useRoute } from 'vue-router'
+import { RouterView, useRouter, useRoute } from 'vue-router'
 import navComponent from '@/components/base/nav.vue'
 import MenuComponent from '@/components/base/sidebar/MenuComponent.vue'
 
-import { useMenuStore } from '@/stores/global.js'
-const menuStore = useMenuStore()
+import { useGlobalStore } from '@/stores/global.js'
+const menuStore = useGlobalStore()
 const route = useRoute()
 const router = useRouter()
 const userData = ref({

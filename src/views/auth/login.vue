@@ -36,10 +36,11 @@
                   class="w-full mt-2"
                   variant="outlined"
                   required
-                  placeholder="*******0912"
+                  name="national_code"
+                  placeholder="*******0123"
                   :rules="[required]"
                   clearable
-                  v-modle="formModel.userName"
+                  v-model="formModel.national_code"
                 ></v-text-field>
               </v-col>
               <v-col cols="12" class="py-0">
@@ -50,7 +51,7 @@
                   required
                   :rules="[required]"
                   clearable
-                  v-modle="formModel.password"
+                  v-model="formModel.password"
                   placeholder="* * * * * * "
                 ></v-text-field>
               </v-col>
@@ -61,7 +62,11 @@
                 </div>
               </v-col>
               <v-col cols="12">
-                <v-btn type="submit" block class="rounded-lg h-[80px] bg-secondary-900 text-withe"
+                <v-btn
+                  :loading="loading"
+                  type="submit"
+                  block
+                  class="rounded-lg h-[80px] bg-secondary-900 text-withe"
                   >ورود</v-btn
                 >
               </v-col>
@@ -82,21 +87,45 @@
 import { rulseForm } from '@/utils/rulesForm'
 import { ref } from 'vue'
 import apiServices from '@/server/apiServices'
+import { useRouter, useRoute } from 'vue-router'
+import Swal from 'sweetalert2'
+
+const router = useRouter()
+const route = useRoute()
 const { required } = rulseForm()
 const loginForm = ref()
+const loading = ref(false)
 const formModel = ref({
-  userName: null,
+  national_code: null,
   password: null,
 })
 
 const onSubmit = () => {
+  loading.value = true
   if (!loginForm.value?.isValid) return
-
-  apiServices.Post('/login', formModel.value).then((res) => {
-    console.log(res)
+  apiServices
+    .Post('/v1/auth/login', formModel.value)
+    .then((res) => {
+      localStorage.setItem('token', res.data.token)
+      localStorage.setItem('role', res.data.user.role)
+      localStorage.setItem('user', JSON.stringify(res.data.user))
+      succeseLogin(res.data.user)
+    })
+    .catch(() => {
+      loading.value = false
+    })
+}
+const succeseLogin = (user) => {
+  loading.value = false
+  router.push('/')
+  Swal.fire({
+    title: 'ورود موفق',
+    text: `    ${user.name + ' ' + user.lastname}  خوش آمدید `,
+    icon: 'success',
+    showConfirmButton: false,
+    timer: 2500,
   })
 }
-const succeseLogin = () => {}
 </script>
 <style scoped>
 @media (min-width: 400px) and (max-width: 1100px) {

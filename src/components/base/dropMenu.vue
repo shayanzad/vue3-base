@@ -9,13 +9,17 @@
       </template>
 
       <v-card min-width="300">
-        <div class="flex justify-between items-center p-4">
+        <div class=" ">
+          <slot name="content"></slot>
+        </div>
+
+        <!-- <div class="flex justify-between items-center p-4">
           <span style="font-weight: 600">{{ propsp.title ?? null }}</span>
           <span style="font-weight: 600" class="rounded-md bg-yellow-500 px-3 text-white">{{
             propsp.count ?? null
           }}</span>
-        </div>
-        <v-list>
+        </div> -->
+        <!-- <v-list>
           <v-list-item
             prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"
             subtitle="Founder of Vuetify"
@@ -37,7 +41,7 @@
           <v-list-item>
             <v-switch color="purple" label="Enable hints" hide-details></v-switch>
           </v-list-item>
-        </v-list>
+        </v-list> -->
 
         <!-- <v-card-actions>
                 <v-spacer></v-spacer>

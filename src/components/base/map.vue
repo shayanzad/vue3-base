@@ -44,6 +44,11 @@ onMounted(() => {
   }).addTo(map)
 
   map.on('click', async (e) => {
+    map.eachLayer((layer) => {
+      if (layer instanceof L.Marker) {
+        layer.remove()
+      }
+    })
     const url = `https://nominatim.openstreetmap.org/reverse?format=json&lat=${e.latlng.lat}&lon=${e.latlng.lng}&addressdetails=1&accept-language=fa`
     try {
       const response = await axios.get(url)
@@ -56,7 +61,7 @@ onMounted(() => {
 
           .openPopup()
 
-        map.setView([e.latlng.lat, e.latlng.lng], 12)
+        map.setView([e.latlng.lat, e.latlng.lng], 16)
         emit('address', {
           addressText: address.state + ' ' + address.city + ' ' + name,
           latlng: e.latlng,

@@ -14,11 +14,8 @@ import VueSweetalert2 from 'vue-sweetalert2'
 import 'sweetalert2/dist/sweetalert2.min.css'
 // تنظیمات پیش‌فرض
 const options = {
-  // زمان ماندن نوتیفیکیشن (به میلی‌ثانیه)
   timeout: 2000,
-  // جایگاه نمایش نوتیفیکیشن
   position: 'bottom-left',
-  // جلوگیری از نمایش چند نوتیف پشت‌سر هم
   hideProgressBar: false,
 }
 const vuetify = createVuetify()
