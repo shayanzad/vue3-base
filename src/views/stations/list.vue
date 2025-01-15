@@ -159,13 +159,13 @@
             ></v-text-field>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field
+            <v-autocomplete
               v-model="formModel.province_id"
               label="  استان *"
-              disabled
+              :items="provinceList"
               variant="outlined"
               density="comfortable"
-            ></v-text-field>
+            ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
@@ -176,13 +176,20 @@
               density="comfortable"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-autocomplate
+          <v-col cols="12" md="12">
+            <v-autocomplete
               label="  نام خط *"
+              :items="provinceList"
               v-model="formModel.line_id"
               variant="outlined"
               density="comfortable"
-            ></v-autocomplate>
+              multiple
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="12">
+            <div v-for="(item, index) in formModel.line_id" :key="index">
+              {{ item }}
+            </div>
           </v-col>
           <v-col cols="12" md="12">
             <mapCompnent height="300" @address="jjjjjj" />
@@ -205,10 +212,12 @@
   </v-dialog>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import tableffff from '@/components/base/table.vue'
 import { useToast } from 'vue-toastification'
 import Swal from 'sweetalert2'
+import apiServices from '@/server/apiServices'
+
 import mapCompnent from '../../components/base/map.vue'
 const toast = useToast()
 const isLoading = ref(false)
@@ -240,6 +249,16 @@ const getAgain = () => {
 }
 const close = () => {
   showForm.value = false
+}
+const provinceList = ref([])
+const getProvince = () => {
+  apiServices
+    .Get('/v1/get_provinces')
+    .then((res) => {
+      console.log(res)
+      provinceList.value = res.data
+    })
+    .catch(() => {})
 }
 const deleteItem = () => {
   showConfirmation()
@@ -353,6 +372,9 @@ const changeRowSelected = (val) => {
 
   rowSelected.value = val
 }
+onMounted(() => {
+  getProvince()
+})
 </script>
 <style scoped>
 .v-data-table {

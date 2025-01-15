@@ -1,10 +1,11 @@
 import axios from 'axios'
 const BASEURL = 'https://safargram.liara.run/api'
+
 const apiClient = axios.create({
   baseURL: BASEURL,
   headers: {
     'Content-Type': 'application/json',
-    Authorization: `Bearer ${localStorage.getItem('token') ?? null}`,
+    Authorization: `${localStorage.getItem('token') ?? null}`,
   },
 })
 import useToast from '@/utils/useToast'

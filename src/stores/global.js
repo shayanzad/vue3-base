@@ -6,6 +6,7 @@ export const useGlobalStore = defineStore('menu', {
     isMenuOpen: true, // وضعیت منو
     isDrawerSettingsOpen: false, // وضعیت منو
     textRole: '', // وضعیت منو
+    token: '', // وضعیت منو
   }),
   actions: {
     toggleMenu() {
@@ -44,6 +45,7 @@ export const useGlobalStore = defineStore('menu', {
         console.error('لطفا روتر را ارسال نمایید')
         return
       }
+      this.token = null
       localStorage.removeItem('token')
       localStorage.removeItem('role')
       localStorage.removeItem('user')
