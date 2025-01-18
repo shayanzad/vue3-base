@@ -39,7 +39,7 @@
       <!-- اسلات برای نمایش زمانی که هیچ داده‌ای وجود ندارد -->
       <template #no-data>
         <div class="flex flex-col justify-center items-center">
-          <img src="../../assets/images/noData.png" class="w-[400px]" />
+          <!-- <img src="../../assets/images/noData.png" class="w-[400px]" /> -->
           <span> موردی برای نمایش وجود ندارد </span>
         </div>
       </template>
