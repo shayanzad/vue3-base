@@ -9,31 +9,32 @@ const apiClient = axios.create({
   },
 })
 import { useRouter } from 'vue-router'
-import useToast from '@/utils/useToast'
-const showToast = useToast()
-const router = useRouter()
+import { useToast } from 'vue-toastification'
 
 const handleApiError = (error) => {
   if (error.response) {
-    const status = error.response.data.code
+    const showToast = useToast()
+    const router = useRouter()
+
+    const status = error.response.status
     const message = error.response.data?.message || 'An error occurred'
-    console.log(error.response.data.message)
+
+    console.log(error.response)
 
     switch (status) {
       case 400:
-        showToast(message, 'error')
         // router.push('/auth/login')
         break
       case 401:
-        showToast(error.response.data.error, 'error')
+        showToast(message, 'error')
         router.push('/auth/login')
         break
       case 404:
-        console.error(message)
+        showToast.error(message)
+
         break
       case 500:
-        console.log(error.response.data)
-        showToast(error.response.data.message, 'error')
+        showToast.error(message, 'error')
 
         break
       default:

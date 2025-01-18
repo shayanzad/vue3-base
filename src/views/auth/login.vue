@@ -101,8 +101,8 @@ const formModel = ref({
 })
 
 const onSubmit = () => {
-  loading.value = true
   if (!loginForm.value?.isValid) return
+  loading.value = true
   apiServices
     .Post('/v1/auth/login', formModel.value)
     .then((res) => {
