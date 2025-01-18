@@ -133,7 +133,7 @@ const sideBarItems = ref([
               <div>
                 <div class="flex justify-between items-center mt-1 mb-4">
                   <img width="50px" class="ml-3" src="../assets/images/taxi-svg.svg" />
-                  <img width="80px" src="../assets/images/safargram.svg" />
+                  <img width="80px" src="../assets/images/mgram.svg" />
                 </div>
                 <MenuComponent :menu-item="sideBarItems" />
               </div>

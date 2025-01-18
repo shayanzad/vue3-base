@@ -8,37 +8,35 @@
       v-model="rowSelected"
       @curentPage="getCurrentPage"
       @rowSelected="changeRowSelected"
-      title="ایستگاه ها"
+      title="نوبت ها"
       itemValue="id"
-      :customSlots="[
-        'operations',
-        'company',
-        'driverName',
-        'created_at',
-        'timeIssue',
-        'rent',
-        'status',
-        'paymentStatus',
-        'source_city',
-        'destination_city',
-      ]"
+      :customSlots="[]"
     >
       <template #actions>
         <div class="flex">
           <div class="ml-2">
             <v-tooltip location="bottom">
-              <template v-slot:activator="{ on, attrs }">
-                <span v-bind="attrs" v-on="on" density="compact" elevation="2">
-                  <v-icon class="text-secondary-900">mdi-refresh</v-icon></span
+              <template v-slot:activator="{ props }">
+                <v-btn variant="text" v-bind="props" @click="getAgain">
+                  <v-icon class="text-secondary-900">mdi-refresh</v-icon></v-btn
                 >
               </template>
               <span>بارگزاری مجدد</span>
             </v-tooltip>
           </div>
           <div class="ml-2">
-            <v-tooltip location="bottom" text="ایجاد ایستگاه">
+            <v-tooltip location="bottom" text="ایجاد نوبت">
               <template v-slot:activator="{ props }">
-                <span v-bind="props" density="compact" elevation="2">
+                <v-btn @click="openForm('new')" variant="text" v-bind="props">
+                  <v-icon class="text-secondary-900">mdi-plus</v-icon></v-btn
+                >
+              </template>
+            </v-tooltip>
+          </div>
+          <div class="ml-2">
+            <v-tooltip location="bottom" text="ویرایش نوبت">
+              <template v-slot:activator="{ props }">
+                <v-btn variant="text" v-bind="props">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -59,14 +57,14 @@
                       ></path>
                     </g>
                   </svg>
-                </span>
+                </v-btn>
               </template>
             </v-tooltip>
           </div>
           <div class="ml-2">
             <v-tooltip location="bottom" text="   حذف">
               <template v-slot:activator="{ props }">
-                <span v-bind="props" density="compact" elevation="2">
+                <v-btn @click="deleteItem" variant="text" v-bind="props">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -86,7 +84,7 @@
                       d="M9.17 4a3.001 3.001 0 0 1 5.66 0m5.67 2h-17m15.333 2.5l-.46 6.9c-.177 2.654-.265 3.981-1.13 4.79s-2.196.81-4.856.81h-.774c-2.66 0-3.991 0-4.856-.81c-.865-.809-.954-2.136-1.13-4.79l-.46-6.9M9.5 11l.5 5m4.5-5l-.5 5"
                     ></path>
                   </svg>
-                </span>
+                </v-btn>
               </template>
             </v-tooltip>
           </div>
@@ -119,82 +117,233 @@
       </template> -->
     </tableffff>
   </div>
+  <v-dialog v-model="showForm" max-width="800" class="rounded-2xl">
+    <v-card class="!rounded-xl">
+      <div class="py-10 px-10">
+        <h1 class="mb-10 dialogTitle">ایجاد ایستگاه</h1>
+        <v-row>
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-model="formModel.title"
+              label=" عنوان *"
+              density="comfortable"
+              variant="outlined"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-model="formModel.managerName"
+              label="نام مدیر *"
+              variant="outlined"
+              density="comfortable"
+            ></v-text-field>
+          </v-col>
+
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-model="formModel.managerNationalCode"
+              label="  کد ملی مدیر *"
+              variant="outlined"
+              density="comfortable"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-autocomplete
+              v-model="formModel.province_id"
+              label="  استان *"
+              :items="provinceList"
+              variant="outlined"
+              density="comfortable"
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="4">
+            <v-text-field
+              v-model="formModel.city_id"
+              label="شهر *"
+              disabled
+              variant="outlined"
+              density="comfortable"
+            ></v-text-field>
+          </v-col>
+          <v-col cols="12" md="12">
+            <v-autocomplete
+              label="  نام خط *"
+              :items="provinceList"
+              v-model="formModel.line_id"
+              variant="outlined"
+              density="comfortable"
+              multiple
+            ></v-autocomplete>
+          </v-col>
+          <v-col cols="12" md="12">
+            <div v-for="(item, index) in formModel.line_id" :key="index">
+              {{ item }}
+            </div>
+          </v-col>
+          <v-col cols="12" md="12">
+            <mapCompnent height="300" @address="jjjjjj" />
+          </v-col>
+          <v-col cols="12" md="12">
+            <v-text-field
+              label="آدرس*"
+              v-model="formModel.address"
+              variant="outlined"
+              density="comfortable"
+            ></v-text-field>
+          </v-col>
+        </v-row>
+        <div class="flex justify-end mt-10">
+          <v-btn variant="tonal" color="red" class="rounded-full mx-2" @click="close">انصراف</v-btn>
+          <v-btn variant="tonal" color="success" class="rounded-full px-4">ثبت</v-btn>
+        </div>
+      </div>
+    </v-card>
+  </v-dialog>
 </template>
 <script setup>
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import tableffff from '@/components/base/table.vue'
-const isLoading = ref(false)
-const rowSelected = ref([])
-const headers = [
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
+import { useToast } from 'vue-toastification'
+import Swal from 'sweetalert2'
+import apiServices from '@/server/apiServices'
 
+import mapCompnent from '../../components/base/map.vue'
+const toast = useToast()
+const isLoading = ref(false)
+const showForm = ref(false)
+const rowSelected = ref([])
+const formModel = ref({
+  id: null,
+  title: null,
+  managerName: null,
+  managerNationalCode: null,
+  province_id: 'خراسان رضوی',
+  city_id: 'مشهد',
+  address: 'مشهد',
+  line_id: null,
+})
+const jjjjjj = (mapData) => {
+  console.log(mapData.addressText)
+  formModel.value.address = mapData.addressText
+}
+const openForm = (type) => {
+  toast.info('ایجاد نوبت درحال توسعه میباشد')
+
+  // console.log(type)
+  // showForm.value = true
+}
+const getAgain = () => {
+  isLoading.value = true
+  setTimeout(() => {
+    isLoading.value = false
+  }, 1000)
+}
+const close = () => {
+  showForm.value = false
+}
+const provinceList = ref([])
+const getProvince = () => {
+  apiServices
+    .Get('/v1/get_provinces')
+    .then((res) => {
+      console.log(res)
+      provinceList.value = res.data
+    })
+    .catch(() => {})
+}
+const deleteItem = () => {
+  showConfirmation()
+}
+const showConfirmation = async () => {
+  const result = await Swal.fire({
+    title: 'آیا از حذف نوبت مطمئن هستید؟',
+    text: 'این عملیات قابل بازگشت نیست!',
+    icon: 'warning',
+    showCancelButton: true,
+    confirmButtonText: 'بله، انجام بده',
+    cancelButtonText: 'لغو',
+  })
+
+  if (result.isConfirmed) {
+    Swal.fire({
+      title: 'انجام شد!',
+      text: 'عملیات با موفقیت انجام شد.',
+      icon: 'success',
+      confirmButtonText: 'متوجه شدم',
+    })
+  } else {
+    Swal.fire({
+      title: 'لغو شد!',
+      text: 'عملیات لغو شد.',
+      icon: 'error',
+      confirmButtonText: 'متوجه شدم',
+    })
+  }
+}
+
+const headers = [
   {
-    title: 'عنوان',
+    title: 'نام ایستگاه',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'stationName',
   },
-  { title: 'نام مدیر', key: 'calories', align: 'end' },
-  { title: 'کد ملی مدیر', key: 'fat', align: 'end' },
-  { title: 'استان', key: 'carbs', align: 'end' },
-  { title: 'شهر', key: 'protein', align: 'center' },
-  { title: 'خطوط', key: 'iron', align: 'end' },
+  { title: 'نام راننده', key: 'driverName', align: 'end' },
+  { title: 'کد ملی راننده', key: 'nationalCode', align: 'end' },
+  { title: 'استان', key: 'province', align: 'center' },
+  { title: 'شهر', key: 'city', align: 'center' },
+  { title: 'خط', key: 'line', align: 'center' },
 ]
 const items = [
   {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    iron: '1',
+    driverName: 'شایان آزادبخت  ',
+    stationName: 'شاهد',
+    nationalCode: '4190513571',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'کاشمر',
   },
   {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    iron: '0',
+    driverName: '   سیروس علیزاده  ',
+    stationName: 'شاهد',
+    nationalCode: '8408875930',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'نقاب',
   },
   {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    iron: '6',
+    driverName: ' کامران حسنی  ',
+    stationName: 'غرب',
+    nationalCode: '0352649674',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'جوین',
   },
   {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    iron: '7',
+    driverName: '  فرهاد اسماعیل زاده  ',
+    stationName: 'شاهد',
+    nationalCode: '8729881536',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'تربت حیدریه',
   },
   {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    iron: '16',
+    driverName: 'رحیم نجاتی  ',
+    stationName: 'گاراژداران',
+    nationalCode: '5172692691',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'نیشابور',
   },
   {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    iron: '1',
+    driverName: '  کاظم روحبخش  ',
+    stationName: 'شرق',
+    nationalCode: '8718961002',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    line: 'خلیل آباد',
   },
+
   // ... more items
 ]
 
@@ -207,10 +356,17 @@ const changeRowSelected = (val) => {
 
   rowSelected.value = val
 }
+onMounted(() => {
+  getProvince()
+})
 </script>
 <style scoped>
 .v-data-table {
   /* border-radius: 15px !important; */
   box-shadow: 0 1px 4px #8592ad33 !important;
+}
+.v-input--is-focused .v-input__slot {
+  border: 2px solid #005fcc !important;
+  border-bottom-color: rgba(0, 0, 0, 0.38) !important;
 }
 </style>

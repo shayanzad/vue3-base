@@ -8,16 +8,17 @@ const apiClient = axios.create({
     Authorization: `${localStorage.getItem('token') ?? null}`,
   },
 })
-import useToast from '@/utils/useToast'
 import { useRouter } from 'vue-router'
-const { showToast } = useToast()
+import useToast from '@/utils/useToast'
+const showToast = useToast()
 const router = useRouter()
 
 const handleApiError = (error) => {
   if (error.response) {
     const status = error.response.data.code
     const message = error.response.data?.message || 'An error occurred'
-    console.log(error.response.data.error)
+    console.log(error.response.data.message)
+
     switch (status) {
       case 400:
         showToast(message, 'error')
@@ -31,7 +32,9 @@ const handleApiError = (error) => {
         console.error(message)
         break
       case 500:
-        console.error(message)
+        console.log(error.response.data)
+        showToast(error.response.data.message, 'error')
+
         break
       default:
         console.error(`Error: ${message}`)

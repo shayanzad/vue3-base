@@ -160,35 +160,77 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
-              v-model="formModel.province_id"
+              v-model="formModel.province"
               label="  استان *"
               :items="provinceList"
               variant="outlined"
+              disabled
               density="comfortable"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="formModel.city_id"
+              v-model="formModel.city"
               label="شهر *"
               disabled
               variant="outlined"
               density="comfortable"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="12">
-            <v-autocomplete
-              label="  نام خط *"
-              :items="provinceList"
-              v-model="formModel.line_id"
-              variant="outlined"
-              density="comfortable"
-              multiple
-            ></v-autocomplete>
+          <v-col cols="12" md="4">
+            <v-btn @click="addLine" class="" color="info" size="large" variant="tonal" block>
+              <v-icon class="ml-2">mdi-plus</v-icon>
+              ایجاد خط
+            </v-btn>
           </v-col>
+
           <v-col cols="12" md="12">
-            <div v-for="(item, index) in formModel.line_id" :key="index">
-              {{ item }}
+            <div v-for="(item, index) in line_list" :key="index">
+              <div class="flex items-center mb-2">
+                <div class="flex justify-center items-center px-3">{{ index + 1 }}</div>
+
+                <div class="mx-1 w-full">
+                  <v-autocomplete
+                    hide-details
+                    label="  نام خط *"
+                    variant="outlined"
+                    density="comfortable"
+                    :items="lines"
+                  ></v-autocomplete>
+                </div>
+                <div class="mx-1 w-full">
+                  <v-text-field
+                    label=" کد خط"
+                    hide-details
+                    variant="outlined"
+                    density="comfortable"
+                  ></v-text-field>
+                </div>
+                <div class="flex justify-center items-center">
+                  <v-btn @click="deleteRowLine(index)" variant="text">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      xmlns:xlink="http://www.w3.org/1999/xlink"
+                      aria-hidden="true"
+                      role="img"
+                      class="text-error cursor-pointer iconify iconify--solar"
+                      size="small"
+                      width="20"
+                      height="20"
+                      viewBox="0 0 24 24"
+                    >
+                      <path
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-linecap="round"
+                        stroke-width="1.5"
+                        d="M9.17 4a3.001 3.001 0 0 1 5.66 0m5.67 2h-17m15.333 2.5l-.46 6.9c-.177 2.654-.265 3.981-1.13 4.79s-2.196.81-4.856.81h-.774c-2.66 0-3.991 0-4.856-.81c-.865-.809-.954-2.136-1.13-4.79l-.46-6.9M9.5 11l.5 5m4.5-5l-.5 5"
+                      ></path>
+                    </svg>
+                  </v-btn>
+                </div>
+              </div>
+              <v-divider :thickness="3" class="border-opacity-75 my-2" color="info"></v-divider>
             </div>
           </v-col>
           <v-col cols="12" md="12">
@@ -205,7 +247,14 @@
         </v-row>
         <div class="flex justify-end mt-10">
           <v-btn variant="tonal" color="red" class="rounded-full mx-2" @click="close">انصراف</v-btn>
-          <v-btn variant="tonal" color="success" class="rounded-full px-4">ثبت</v-btn>
+          <v-btn
+            variant="tonal"
+            :loading="loadingForm"
+            @click="saveForm"
+            color="success"
+            class="rounded-full px-4"
+            >ثبت</v-btn
+          >
         </div>
       </div>
     </v-card>
@@ -221,18 +270,42 @@ import apiServices from '@/server/apiServices'
 import mapCompnent from '../../components/base/map.vue'
 const toast = useToast()
 const isLoading = ref(false)
+const loadingForm = ref(false)
 const showForm = ref(false)
 const rowSelected = ref([])
+const line_list = ref([])
 const formModel = ref({
   id: null,
   title: null,
   managerName: null,
   managerNationalCode: null,
-  province_id: 'خراسان رضوی',
-  city_id: 'مشهد',
+  province: 'خراسان رضوی',
+  city: 'مشهد',
   address: 'مشهد',
-  line_id: null,
+  line: null,
 })
+const lines = ref([
+  {
+    id: 1,
+    title: '  گناباد',
+    managerName: null,
+  },
+  {
+    id: 2,
+    title: 'تربت حیدریه',
+    managerName: null,
+  },
+  {
+    id: 3,
+    title: '   تربت جام',
+    managerName: null,
+  },
+  {
+    id: 4,
+    title: '  نیشابور',
+    managerName: null,
+  },
+])
 const jjjjjj = (mapData) => {
   console.log(mapData.addressText)
   formModel.value.address = mapData.addressText
@@ -249,6 +322,32 @@ const getAgain = () => {
 }
 const close = () => {
   showForm.value = false
+  formModel.value = {
+    id: null,
+    title: null,
+    managerName: null,
+    managerNationalCode: null,
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    address: 'مشهد',
+    line: null,
+  }
+}
+const saveForm = () => {
+  loadingForm.value = true
+  items.value.push(formModel.value)
+  setTimeout(() => {
+    toast.success('ایستگاه با موفقیت ایجاد شد  ')
+    loadingForm.value = false
+    close()
+  }, 2500)
+}
+const addLine = () => {
+  var item = {
+    line: null,
+    line_code: null,
+  }
+  line_list.value.push(item)
 }
 const provinceList = ref([])
 const getProvince = () => {
@@ -262,6 +361,9 @@ const getProvince = () => {
 }
 const deleteItem = () => {
   showConfirmation()
+}
+const deleteRowLine = (index) => {
+  line_list.value.splice(index, 1)
 }
 const showConfirmation = async () => {
   const result = await Swal.fire({
@@ -303,65 +405,40 @@ const headers = [
     title: 'عنوان',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'title',
   },
-  { title: 'نام مدیر', key: 'calories', align: 'end' },
-  { title: 'کد ملی مدیر', key: 'fat', align: 'end' },
-  { title: 'استان', key: 'carbs', align: 'end' },
-  { title: 'شهر', key: 'protein', align: 'center' },
-  { title: 'خطوط', key: 'iron', align: 'end' },
+  { title: 'نام مدیر', key: 'managerName', align: 'end' },
+  { title: 'کد ملی مدیر', key: 'managerNationalCode', align: 'end' },
+  { title: 'استان', key: 'province', align: 'end' },
+  { title: 'شهر', key: 'city', align: 'center' },
+  { title: 'خطوط', key: 'lines', align: 'center' },
 ]
-const items = [
+const items = ref([
   {
-    name: 'Frozen Yogurt',
-    calories: 159,
-    fat: 6.0,
-    carbs: 24,
-    protein: 4.0,
-    iron: '1',
+    title: 'پایانه امام رضا',
+    managerName: 'احمد رضا توکلی',
+    managerNationalCode: '8408875930',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    lines: 'گناباد',
   },
   {
-    name: 'Jelly bean',
-    calories: 375,
-    fat: 0.0,
-    carbs: 94,
-    protein: 0.0,
-    iron: '0',
+    title: 'پایانه معراج',
+    managerName: 'کامران ابراهیمی',
+    managerNationalCode: '0352649674',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    lines: 'تربت حیدریه',
   },
   {
-    name: 'KitKat',
-    calories: 518,
-    fat: 26.0,
-    carbs: 65,
-    protein: 7,
-    iron: '6',
+    title: 'راه ابریشم',
+    managerName: 'شایان آزادبخت',
+    managerNationalCode: '4190513571',
+    province: 'خراسان رضوی',
+    city: 'مشهد',
+    lines: 'تربت جام',
   },
-  {
-    name: 'Eclair',
-    calories: 262,
-    fat: 16.0,
-    carbs: 23,
-    protein: 6.0,
-    iron: '7',
-  },
-  {
-    name: 'Gingerbread',
-    calories: 356,
-    fat: 16.0,
-    carbs: 49,
-    protein: 3.9,
-    iron: '16',
-  },
-  {
-    name: 'Ice cream sandwich',
-    calories: 237,
-    fat: 9.0,
-    carbs: 37,
-    protein: 4.3,
-    iron: '1',
-  },
-  // ... more items
-]
+])
 
 const getCurrentPage = (val) => {
   // page.value = val
