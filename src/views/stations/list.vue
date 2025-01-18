@@ -10,25 +10,14 @@
       @rowSelected="changeRowSelected"
       title="ایستگاه ها"
       itemValue="id"
-      :customSlots="[
-        'operations',
-        'company',
-        'driverName',
-        'created_at',
-        'timeIssue',
-        'rent',
-        'status',
-        'paymentStatus',
-        'source_city',
-        'destination_city',
-      ]"
+      :customSlots="['lines']"
     >
       <template #actions>
         <div class="flex">
           <div class="ml-2">
             <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
-                <v-btn variant="text" v-bind="props" @click="getAgain">
+                <v-btn variant="text" v-bind="props" @click="getStationsList">
                   <v-icon class="text-secondary-900">mdi-refresh</v-icon></v-btn
                 >
               </template>
@@ -101,6 +90,15 @@
           </div>
         </div>
       </template>
+      <template #lines="{ item }">
+        <div class="flex justify-center items-center">
+          <span v-for="(itemData, indexData) in item.lines" :key="indexData">
+            <div class="mx-1 px-4 py-1 rounded-md text-success shadowLight" disabled>
+              {{ itemData.name }}
+            </div>
+          </span>
+        </div>
+      </template>
       <!-- <template #header>
         <div class="flex">
           <router-link to="/panel/factory/orders/addNew"
@@ -152,7 +150,7 @@
 
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="formModel.managerNationalCode"
+              v-model="formModel.manager_national_code"
               label="  کد ملی مدیر *"
               variant="outlined"
               density="comfortable"
@@ -278,7 +276,7 @@ const formModel = ref({
   id: null,
   title: null,
   managerName: null,
-  managerNationalCode: null,
+  manager_national_code: null,
   province: 'خراسان رضوی',
   city: 'مشهد',
   address: 'مشهد',
@@ -314,19 +312,14 @@ const openForm = (type) => {
   console.log(type)
   showForm.value = true
 }
-const getAgain = () => {
-  isLoading.value = true
-  setTimeout(() => {
-    isLoading.value = false
-  }, 1000)
-}
+const getAgain = () => {}
 const close = () => {
   showForm.value = false
   formModel.value = {
     id: null,
     title: null,
     managerName: null,
-    managerNationalCode: null,
+    manager_national_code: null,
     province: 'خراسان رضوی',
     city: 'مشهد',
     address: 'مشهد',
@@ -334,13 +327,18 @@ const close = () => {
   }
 }
 const saveForm = () => {
-  loadingForm.value = true
-  items.value.push(formModel.value)
-  setTimeout(() => {
-    toast.success('ایستگاه با موفقیت ایجاد شد  ')
-    loadingForm.value = false
-    close()
-  }, 2500)
+  apiServices
+    .Post('/v1/station/add', formModel.value)
+    .then((res) => {
+      console.log(res)
+      // items.value = res.data
+      // setTimeout(() => {
+      //   isLoading.value = false
+      // }, 1000)
+    })
+    .catch(() => {
+      isLoading.value = false
+    })
 }
 const addLine = () => {
   var item = {
@@ -358,6 +356,21 @@ const getProvince = () => {
       provinceList.value = res.data
     })
     .catch(() => {})
+}
+const getStationsList = () => {
+  isLoading.value = true
+  apiServices
+    .Get('/v1/station/get')
+    .then((res) => {
+      console.log(res)
+      items.value = res.data
+      setTimeout(() => {
+        isLoading.value = false
+      }, 1000)
+    })
+    .catch(() => {
+      isLoading.value = false
+    })
 }
 const deleteItem = () => {
   showConfirmation()
@@ -405,40 +418,15 @@ const headers = [
     title: 'عنوان',
     align: 'start',
     sortable: false,
-    key: 'title',
+    key: 'name',
   },
   { title: 'نام مدیر', key: 'managerName', align: 'end' },
-  { title: 'کد ملی مدیر', key: 'managerNationalCode', align: 'end' },
-  { title: 'استان', key: 'province', align: 'end' },
-  { title: 'شهر', key: 'city', align: 'center' },
+  { title: 'کد ملی مدیر', key: 'manager_national_code', align: 'end' },
+  { title: 'استان', key: 'province.title', align: 'end' },
+  { title: 'شهر', key: 'city.title', align: 'center' },
   { title: 'خطوط', key: 'lines', align: 'center' },
 ]
-const items = ref([
-  {
-    title: 'پایانه امام رضا',
-    managerName: 'احمد رضا توکلی',
-    managerNationalCode: '8408875930',
-    province: 'خراسان رضوی',
-    city: 'مشهد',
-    lines: 'گناباد',
-  },
-  {
-    title: 'پایانه معراج',
-    managerName: 'کامران ابراهیمی',
-    managerNationalCode: '0352649674',
-    province: 'خراسان رضوی',
-    city: 'مشهد',
-    lines: 'تربت حیدریه',
-  },
-  {
-    title: 'راه ابریشم',
-    managerName: 'شایان آزادبخت',
-    managerNationalCode: '4190513571',
-    province: 'خراسان رضوی',
-    city: 'مشهد',
-    lines: 'تربت جام',
-  },
-])
+const items = ref([])
 
 const getCurrentPage = (val) => {
   // page.value = val
@@ -451,6 +439,7 @@ const changeRowSelected = (val) => {
 }
 onMounted(() => {
   getProvince()
+  getStationsList()
 })
 </script>
 <style scoped>

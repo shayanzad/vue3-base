@@ -8,8 +8,8 @@
       v-model="rowSelected"
       @curentPage="getCurrentPage"
       @rowSelected="changeRowSelected"
-      title="نوبت ها"
       itemValue="id"
+      title="نوبت ها"
       :customSlots="[]"
     >
       <template #actions>
@@ -296,6 +296,7 @@ const headers = [
 ]
 const items = [
   {
+    id: 1,
     driverName: 'شایان آزادبخت  ',
     stationName: 'شاهد',
     nationalCode: '4190513571',
@@ -304,6 +305,8 @@ const items = [
     line: 'کاشمر',
   },
   {
+    id: 2,
+
     driverName: '   سیروس علیزاده  ',
     stationName: 'شاهد',
     nationalCode: '8408875930',
@@ -312,6 +315,8 @@ const items = [
     line: 'نقاب',
   },
   {
+    id: 3,
+
     driverName: ' کامران حسنی  ',
     stationName: 'غرب',
     nationalCode: '0352649674',
@@ -320,6 +325,8 @@ const items = [
     line: 'جوین',
   },
   {
+    id: 4,
+
     driverName: '  فرهاد اسماعیل زاده  ',
     stationName: 'شاهد',
     nationalCode: '8729881536',
@@ -328,6 +335,8 @@ const items = [
     line: 'تربت حیدریه',
   },
   {
+    id: 5,
+
     driverName: 'رحیم نجاتی  ',
     stationName: 'گاراژداران',
     nationalCode: '5172692691',
@@ -336,6 +345,8 @@ const items = [
     line: 'نیشابور',
   },
   {
+    id: 6,
+
     driverName: '  کاظم روحبخش  ',
     stationName: 'شرق',
     nationalCode: '8718961002',

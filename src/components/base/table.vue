@@ -16,6 +16,7 @@
       v-model:expanded="expanded"
       v-model="rowSelected"
       :items="props.items"
+      select-strategy="single"
       :headers="props.headers.filter((item) => item.state != 'detail')"
       :loading="props.loading"
       no-data-text="موردی برای نمایش وجود ندارد "
@@ -89,8 +90,9 @@ const rowSelected = ref([])
 // const table = computed(() => tableStore.refresh)
 watch(
   () => rowSelected.value,
-  () => {
-    console.log('')
+  (val) => {
+    console.log(val)
+
     emit('rowSelected', rowSelected.value)
   },
 )
