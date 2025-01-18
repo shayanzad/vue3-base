@@ -84,6 +84,18 @@ const sideBarItems = ref([
       },
     ],
   },
+  {
+    title: ' اطلاعات پایه',
+    to: '',
+    icon: 'mdi-book-cog-outline',
+    children: [
+      {
+        title: 'فهرست کاربران',
+        to: '/base-information/users',
+        icon: '',
+      },
+    ],
+  },
 ])
 </script>
 <template>

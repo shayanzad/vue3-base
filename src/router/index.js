@@ -79,6 +79,16 @@ const router = createRouter({
             bredCroump: true,
           },
         },
+        {
+          path: '/base-information/users',
+          name: 'base-information-users',
+          component: () => import('../views/base-information/users/list.vue'),
+          meta: {
+            title: 'کاربران',
+            guest: true,
+            bredCroump: true,
+          },
+        },
       ],
     },
     {

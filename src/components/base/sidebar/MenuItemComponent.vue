@@ -15,7 +15,7 @@
       v-else
       @click="handelShowChild"
       v-ripple
-      :class="{ 'text-secondary-700 font-bold': $route.path === props.item.to }"
+      :class="{ 'text-secondary-700 !bg-primary-200 font-bold': $route.path === props.item.to }"
       class="flex m-1 rounded-full hover:bg-slate-100 px-4 py-2 ml-5 cursor-pointer hover:!bg-primary-200"
     >
       <VIcon :icon="props.item.icon" class="me-2 text-secondary-900" />
