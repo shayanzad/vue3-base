@@ -23,7 +23,7 @@ const uuu = [
   { title: 'ایستگاه سرخس', latlang: [36.5372, 61.1561] },
 ]
 onMounted(() => {
-  const map = L.map('map').setView([36.310699, 59.599457], 8)
+  const map = L.map('map').setView([36.310699, 59.599457], 10)
   var greenIcon = new L.Icon({
     iconUrl: `https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-${'blue'}.png`,
     shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png',
@@ -39,9 +39,12 @@ onMounted(() => {
   //     .bindPopup(`${item.title}`)
   //     .openPopup()
   // })
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; <a href="https://shayantarabar.ir/">shayan tarabar</a>  ',
-  }).addTo(map)
+  L.tileLayer(
+    'https://api.mapbox.com/styles/v1/navidnejati/cld9vooyj002f01t7vtfdbx8z/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmF2aWRuZWphdGkiLCJhIjoiY2xkOXYwMWxvMGN5eDNxbW5paXV4dWxldyJ9.AO4MwCjLvs1Am_B39aYWPA',
+    {
+      attribution: '&copy; <a href="https://shayantarabar.ir/">shayan tarabar</a>  ',
+    },
+  ).addTo(map)
 
   map.on('click', async (e) => {
     map.eachLayer((layer) => {
