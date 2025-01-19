@@ -10,7 +10,7 @@
       @rowSelected="changeRowSelected"
       title="ایستگاه ها"
       itemValue="id"
-      :customSlots="['lines']"
+      :customSlots="['lines', 'manager']"
     >
       <template #actions>
         <div class="flex">
@@ -90,9 +90,14 @@
           </div>
         </div>
       </template>
+      <template #manager="{ item }">
+        <div>
+          {{ item.manager?.name + ' ' + item.manager?.lastName }}
+        </div>
+      </template>
       <template #lines="{ item }">
         <div class="flex justify-center items-center">
-          <span v-for="(itemData, indexData) in item.lines" :key="indexData">
+          <span v-for="(itemData, indexData) in item.station.lines" :key="indexData">
             <div class="mx-1 px-4 py-1 rounded-md text-success shadowLight" disabled>
               {{ itemData.name }}
             </div>
@@ -139,14 +144,6 @@
               variant="outlined"
             ></v-text-field>
           </v-col>
-          <v-col cols="12" md="4">
-            <v-text-field
-              v-model="formModel.managerName"
-              label="نام مدیر *"
-              variant="outlined"
-              density="comfortable"
-            ></v-text-field>
-          </v-col>
 
           <v-col cols="12" md="4">
             <v-text-field
@@ -158,22 +155,26 @@
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
-              v-model="formModel.province"
+              v-model="formModel.province_id"
               label="  استان *"
               :items="provinceList"
+              @update:modelValue="getCityById(formModel.province_id)"
+              item-title="title"
+              item-value="id"
               variant="outlined"
-              disabled
               density="comfortable"
             ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="4">
-            <v-text-field
-              v-model="formModel.city"
+            <v-autocomplete
+              v-model="formModel.city_id"
+              :items="cityList"
               label="شهر *"
-              disabled
+              item-title="title"
+              item-value="id"
               variant="outlined"
               density="comfortable"
-            ></v-text-field>
+            ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="4">
             <v-btn @click="addLine" class="" color="info" size="large" variant="tonal" block>
@@ -183,7 +184,7 @@
           </v-col>
 
           <v-col cols="12" md="12">
-            <div v-for="(item, index) in line_list" :key="index">
+            <div v-for="(item, index) in formModel.lines" :key="index">
               <div class="flex items-center mb-2">
                 <div class="flex justify-center items-center px-3">{{ index + 1 }}</div>
 
@@ -194,6 +195,7 @@
                     variant="outlined"
                     density="comfortable"
                     :items="lines"
+                    v-model="item.name"
                   ></v-autocomplete>
                 </div>
                 <div class="mx-1 w-full">
@@ -202,6 +204,7 @@
                     hide-details
                     variant="outlined"
                     density="comfortable"
+                    v-model="item.id"
                   ></v-text-field>
                 </div>
                 <div class="flex justify-center items-center">
@@ -275,12 +278,13 @@ const line_list = ref([])
 const formModel = ref({
   id: null,
   title: null,
-  managerName: null,
   manager_national_code: null,
-  province: 'خراسان رضوی',
-  city: 'مشهد',
-  address: 'مشهد',
-  line: null,
+  province_id: 'خراسان رضوی',
+  city_id: 'مشهد',
+  address: '',
+  lat: '',
+  lng: '',
+  lines: [],
 })
 const lines = ref([
   {
@@ -307,23 +311,26 @@ const lines = ref([
 const jjjjjj = (mapData) => {
   console.log(mapData.addressText)
   formModel.value.address = mapData.addressText
+  formModel.value.lat = mapData.latlng.lat
+  formModel.value.lng = mapData.latlng.lng
 }
 const openForm = (type) => {
   console.log(type)
   showForm.value = true
 }
 const getAgain = () => {}
+
 const close = () => {
   showForm.value = false
   formModel.value = {
     id: null,
     title: null,
-    managerName: null,
+    // managerName: null,
     manager_national_code: null,
-    province: 'خراسان رضوی',
-    city: 'مشهد',
+    province_id: 'خراسان رضوی',
+    city_id: 'مشهد',
     address: 'مشهد',
-    line: null,
+    lines: [],
   }
 }
 const saveForm = () => {
@@ -331,9 +338,9 @@ const saveForm = () => {
     .Post('/v1/station/add', formModel.value)
     .then((res) => {
       console.log(res)
-      // items.value = res.data
+      items.value = res.data
       // setTimeout(() => {
-      //   isLoading.value = false
+      isLoading.value = false
       // }, 1000)
     })
     .catch(() => {
@@ -342,10 +349,10 @@ const saveForm = () => {
 }
 const addLine = () => {
   var item = {
-    line: null,
-    line_code: null,
+    name: null,
+    id: null,
   }
-  line_list.value.push(item)
+  formModel.value.lines.push(item)
 }
 const provinceList = ref([])
 const getProvince = () => {
@@ -354,6 +361,16 @@ const getProvince = () => {
     .then((res) => {
       console.log(res)
       provinceList.value = res.data
+    })
+    .catch(() => {})
+}
+const cityList = ref([])
+const getCityById = (zone) => {
+  apiServices
+    .Post('/v1/get_cities', { zone: zone.toString().substring(0, 2) })
+    .then((res) => {
+      console.log(res)
+      cityList.value = res.data
     })
     .catch(() => {})
 }
@@ -376,54 +393,58 @@ const deleteItem = () => {
   showConfirmation()
 }
 const deleteRowLine = (index) => {
-  line_list.value.splice(index, 1)
+  formModel.value.lines.splice(index, 1)
 }
 const showConfirmation = async () => {
-  const result = await Swal.fire({
-    title: 'آیا از حذف ایستگاه مطمئن هستید؟',
-    text: 'این عملیات قابل بازگشت نیست!',
-    icon: 'warning',
-    showCancelButton: true,
-    confirmButtonText: 'بله، انجام بده',
-    cancelButtonText: 'لغو',
-  })
+  if (rowSelected.value.length > 0) {
+    const result = await Swal.fire({
+      title: 'آیا از حذف ایستگاه مطمئن هستید؟',
+      text: 'این عملیات قابل بازگشت نیست!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'بله، انجام بده',
+      cancelButtonText: 'لغو',
+    })
 
-  if (result.isConfirmed) {
-    Swal.fire({
-      title: 'انجام شد!',
-      text: 'عملیات با موفقیت انجام شد.',
-      icon: 'success',
-      confirmButtonText: 'متوجه شدم',
-    })
+    if (result.isConfirmed) {
+      apiServices
+        .Post('/v1/station/delete', { id: rowSelected.value[0] })
+        .then((res) => {
+          console.log(res)
+          getStationsList()
+
+          Swal.fire({
+            title: 'انجام شد!',
+            text: 'عملیات با موفقیت انجام شد.',
+            icon: 'success',
+            confirmButtonText: 'متوجه شدم',
+          })
+        })
+        .catch(() => {})
+    } else {
+      Swal.fire({
+        title: 'لغو شد!',
+        text: 'عملیات لغو شد.',
+        icon: 'error',
+        confirmButtonText: 'متوجه شدم',
+      })
+    }
   } else {
-    Swal.fire({
-      title: 'لغو شد!',
-      text: 'عملیات لغو شد.',
-      icon: 'error',
-      confirmButtonText: 'متوجه شدم',
-    })
+    toast.info('یک مورد را انتخاب کنید')
   }
 }
 
 const headers = [
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-  // { title: 'نام شرکت', value: 'company.company_name', status: true },
-
   {
     title: 'عنوان',
     align: 'start',
     sortable: false,
-    key: 'name',
+    key: 'station.name',
   },
-  { title: 'نام مدیر', key: 'managerName', align: 'end' },
-  { title: 'کد ملی مدیر', key: 'manager_national_code', align: 'end' },
-  { title: 'استان', key: 'province.title', align: 'end' },
-  { title: 'شهر', key: 'city.title', align: 'center' },
+  { title: 'نام مدیر', key: 'manager', align: 'end' },
+  { title: 'کد ملی مدیر', key: 'manager.national_code', align: 'end' },
+  { title: 'استان', key: 'station.province.title', align: 'end' },
+  { title: 'شهر', key: 'station.city.title', align: 'center' },
   { title: 'خطوط', key: 'lines', align: 'center' },
 ]
 const items = ref([])

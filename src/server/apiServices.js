@@ -8,13 +8,13 @@ const apiClient = axios.create({
     Authorization: `${localStorage.getItem('token') ?? null}`,
   },
 })
-import { useRouter } from 'vue-router'
+
 import { useToast } from 'vue-toastification'
 
-const handleApiError = (error) => {
+const handleApiError = (error, inject) => {
   if (error.response) {
     const showToast = useToast()
-    const router = useRouter()
+    const router = inject('router');
 
     const status = error.response.status
     const message = error.response.data?.message || 'An error occurred'
