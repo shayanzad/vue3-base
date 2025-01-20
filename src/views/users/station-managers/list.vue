@@ -383,7 +383,7 @@ const getProvince = () => {
 const getList = () => {
   isLoading.value = true
   apiServices
-    .Get('/v1/user/get')
+    .Post('/v1/user/get', { role: 6 })
     .then((res) => {
       console.log(res)
       items.value = res.data

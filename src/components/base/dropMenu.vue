@@ -3,22 +3,27 @@
     <v-menu v-model="showMenu" :close-on-content-click="false" transition="scale-transition">
       <template v-slot:activator="{ props }">
         <!-- <v-btn color="indigo" v-bind="props"> show as Popover </v-btn> -->
-        <v-avatar v-bind="props" size="large" @click="toggleShow" class="cursor-pointer">
+        <v-avatar
+          v-bind="props"
+          size="large"
+          @click="toggleShow"
+          class="cursor-pointer shadowLight bg-primary-200"
+        >
           <v-icon size="30" :icon="`mdi-${propsp.icon ?? 'home'}`"></v-icon>
         </v-avatar>
       </template>
 
-      <v-card min-width="300">
-        <div class=" ">
-          <slot name="content"></slot>
-        </div>
-
-        <!-- <div class="flex justify-between items-center p-4">
+      <v-card min-width="300" class="!rounded-xl">
+        <div class="flex justify-between items-center p-4">
           <span style="font-weight: 600">{{ propsp.title ?? null }}</span>
           <span style="font-weight: 600" class="rounded-md bg-yellow-500 px-3 text-white">{{
             propsp.count ?? null
           }}</span>
-        </div> -->
+        </div>
+        <div class=" ">
+          <slot name="content"></slot>
+        </div>
+
         <!-- <v-list>
           <v-list-item
             prepend-avatar="https://cdn.vuetifyjs.com/images/john.jpg"

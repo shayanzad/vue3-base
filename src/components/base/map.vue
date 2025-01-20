@@ -9,7 +9,7 @@
 </template>
 
 <script setup>
-const props = defineProps(['height'])
+const props = defineProps(['height', 'type', 'latlng'])
 
 import { defineEmits, defineProps, onMounted } from 'vue'
 import L from 'leaflet'
@@ -32,19 +32,20 @@ onMounted(() => {
     popupAnchor: [1, -34],
     shadowSize: [41, 41],
   })
-  // uuu.forEach((item) => {
-  //   L.marker(item.latlang, { icon: greenIcon })
-  //     .addTo(map)
 
-  //     .bindPopup(`${item.title}`)
-  //     .openPopup()
-  // })
   L.tileLayer(
     'https://api.mapbox.com/styles/v1/navidnejati/cld9vooyj002f01t7vtfdbx8z/tiles/256/{z}/{x}/{y}@2x?access_token=pk.eyJ1IjoibmF2aWRuZWphdGkiLCJhIjoiY2xkOXYwMWxvMGN5eDNxbW5paXV4dWxldyJ9.AO4MwCjLvs1Am_B39aYWPA',
     {
       attribution: '&copy; <a href="https://shayantarabar.ir/">shayan tarabar</a>  ',
     },
   ).addTo(map)
+  if (props.type == 'update') {
+    L.marker(props.latlng, { icon: greenIcon })
+      .addTo(map)
+
+      .openPopup()
+    map.setView([props.latlng[0], props.latlng[1]], 16)
+  }
 
   map.on('click', async (e) => {
     map.eachLayer((layer) => {

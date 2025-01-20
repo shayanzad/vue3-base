@@ -43,19 +43,18 @@ const sideBarItems = ref([
       },
     ],
   },
-  // {
-  //   title: 'راننده ها',
-  //   to: '',
-  //   icon: 'mdi-card-account-details-outline',
-  //   children: [
-  //     {
-  //       title: '  فهرست',
-  //       to: '/drivers/list',
-  //       icon: '',
-  //     },
-
-  //   ],
-  // },
+  {
+    title: 'راننده ها',
+    to: '',
+    icon: 'mdi-card-account-details-outline',
+    children: [
+      {
+        title: '  فهرست',
+        to: '/drivers',
+        icon: '',
+      },
+    ],
+  },
   {
     title: 'نوبت ها',
     to: '',
@@ -90,11 +89,7 @@ const sideBarItems = ref([
         to: '/users/station-managers',
         icon: '',
       },
-      {
-        title: 'فهرست رانندگان',
-        to: '/users/drivers',
-        icon: '',
-      },
+
       {
         title: 'فهرست مدیران سیستم',
         to: '/users/admins',
@@ -160,8 +155,9 @@ const sideBarItems = ref([
                 </div>
                 <MenuComponent :menu-item="sideBarItems" />
               </div>
-              <div>
-                <img width="80px" class="ml-3" src="../assets/images/taxi-svg.svg" />
+              <div class="flex justify-center items-center mb-6">
+                <!-- <img width="80px" class="ml-3" src="../assets/images/taxi-svg.svg" /> -->
+                <span>طراحی شده توسط <span class="text-primary-900">شایان پردازش</span></span>
               </div>
             </div>
           </div>

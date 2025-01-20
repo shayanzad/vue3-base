@@ -4,7 +4,7 @@
       :headers="headers"
       :items="items"
       :loading="isLoading"
-      showSelect
+      :showSelect="false"
       v-model="rowSelected"
       @curentPage="getCurrentPage"
       @rowSelected="changeRowSelected"
@@ -27,7 +27,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="ایجاد ایستگاه">
               <template v-slot:activator="{ props }">
-                <v-btn @click="openForm('new')" variant="text" v-bind="props">
+                <v-btn disabled @click="openForm('new')" variant="text" v-bind="props">
                   <v-icon class="text-secondary-900">mdi-plus</v-icon></v-btn
                 >
               </template>
@@ -36,7 +36,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="ویرایش ایستگاه">
               <template v-slot:activator="{ props }">
-                <v-btn variant="text" v-bind="props">
+                <v-btn variant="text" disabled v-bind="props">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -64,7 +64,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="   حذف">
               <template v-slot:activator="{ props }">
-                <v-btn @click="deleteItem" variant="text" v-bind="props">
+                <v-btn disabled @click="deleteItem" variant="text" v-bind="props">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -311,20 +311,20 @@ const jjjjjj = (mapData) => {
 }
 const getRoleText = (role) => {
   switch (role) {
-    case 0:
+    case 1:
       return 'مدیر سیستم'
 
-    case 1:
-      return 'شرکت مسافری'
     case 2:
-      return '  مسافر'
-    case 3:
-      return '  راننده'
-    case 4:
       return 'شرکت مسافری'
+    case 3:
+      return '  مسافر'
+    case 4:
+      return '  راننده'
     case 5:
-      return '  مدیر ایستگاه'
+      return 'شرکت مسافری'
     case 6:
+      return '  مدیر ایستگاه'
+    case 7:
       return 'بدون نقش'
 
     default:
@@ -383,7 +383,7 @@ const getProvince = () => {
 const getList = () => {
   isLoading.value = true
   apiServices
-    .Get('/v1/user/get')
+    .Post('/v1/user/get', { role: 1 })
     .then((res) => {
       console.log(res)
       items.value = res.data

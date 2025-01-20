@@ -9,7 +9,6 @@
       @curentPage="getCurrentPage"
       @rowSelected="changeRowSelected"
       title="ایستگاه ها"
-      itemValue="station.id"
       returnObject
       :customSlots="['lines', 'manager']"
     >
@@ -19,8 +18,8 @@
             <v-tooltip location="bottom">
               <template v-slot:activator="{ props }">
                 <v-btn variant="text" v-bind="props" @click="getStationsList">
-                  <v-icon class="text-secondary-900">mdi-refresh</v-icon></v-btn
-                >
+                  <v-icon class="text-secondary-900">mdi-refresh</v-icon>
+                </v-btn>
               </template>
               <span>بارگزاری مجدد</span>
             </v-tooltip>
@@ -28,7 +27,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="ایجاد ایستگاه">
               <template v-slot:activator="{ props }">
-                <v-btn @click="openForm('new')" variant="text" v-bind="props">
+                <v-btn @click="openForm('add')" variant="text" v-bind="props">
                   <v-icon class="text-secondary-900">mdi-plus</v-icon></v-btn
                 >
               </template>
@@ -37,7 +36,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="ویرایش ایستگاه">
               <template v-slot:activator="{ props }">
-                <v-btn variant="text" v-bind="props" @click="openForm('edit')">
+                <v-btn variant="text" v-bind="props" @click="openForm('update')">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -94,6 +93,11 @@
       <template #manager="{ item }">
         <div>
           {{ item.manager?.name + ' ' + item.manager?.lastName }}
+        </div>
+      </template>
+      <template #address="{ item }">
+        <div>
+          {{ item.station?.name }}
         </div>
       </template>
       <template #lines="{ item }">
@@ -239,7 +243,12 @@
             </div>
           </v-col>
           <v-col cols="12" md="12">
-            <mapCompnent height="300" @address="jjjjjj" />
+            <mapCompnent
+              :type="typeMethod"
+              :latlng="[formModel.lat, formModel.lng]"
+              height="300"
+              @address="jjjjjj"
+            />
           </v-col>
           <v-col cols="12" md="12">
             <v-text-field
@@ -277,6 +286,7 @@ const toast = useToast()
 const isLoading = ref(false)
 const loadingForm = ref(false)
 const showForm = ref(false)
+const typeMethod = ref('add')
 const rowSelected = ref([])
 const managerList = ref([])
 const line_list = ref([])
@@ -314,14 +324,41 @@ const lines = ref([
   },
 ])
 const jjjjjj = (mapData) => {
-  console.log(mapData.addressText)
   formModel.value.address = mapData.addressText
   formModel.value.lat = mapData.latlng.lat
   formModel.value.lng = mapData.latlng.lng
 }
 const openForm = (type) => {
-  console.log(type)
-  showForm.value = true
+  typeMethod.value = type
+  if (type == 'add') {
+    showForm.value = true
+  } else {
+    if (rowSelected.value.length > 0) {
+      apiServices
+        .Post('/v1/get_cities', {
+          zone: rowSelected.value[0].station.province.zone.toString().substring(0, 2),
+        })
+        .then((res) => {
+          cityList.value = res.data
+          var item = {
+            name: rowSelected.value[0].station.name,
+            id: rowSelected.value[0].station.id,
+            manager_national_code: rowSelected.value[0].manager?.national_code,
+            province_id: rowSelected.value[0].station.province?.id,
+            city_id: rowSelected.value[0].station.city?.id,
+            address: rowSelected.value[0].station.address,
+            lat: rowSelected.value[0].station.lat,
+            lng: rowSelected.value[0].station.lng,
+            lines: rowSelected.value[0].station.lines,
+          }
+          formModel.value = item
+          showForm.value = true
+        })
+        .catch(() => {})
+    } else {
+      toast.info('یک مورد را انتخاب کنید')
+    }
+  }
 }
 const getAgain = () => {}
 
@@ -341,7 +378,7 @@ const close = () => {
 }
 const saveForm = () => {
   apiServices
-    .Post('/v1/station/add', formModel.value)
+    .Post(`/v1/station/${typeMethod.value}`, formModel.value)
     .then((res) => {
       // items.value = res.data
       isLoading.value = false
@@ -375,7 +412,6 @@ const getCityById = (zone) => {
   apiServices
     .Post('/v1/get_cities', { zone: zone.toString().substring(0, 2) })
     .then((res) => {
-      console.log(res)
       cityList.value = res.data
     })
     .catch(() => {})
@@ -398,7 +434,7 @@ const getStationsList = () => {
 const getManagerList = () => {
   isLoading.value = true
   apiServices
-    .Get('/v1/user/get')
+    .Post('/v1/user/get', { role: 1 })
     .then((res) => {
       res.data.forEach((element) => {
         var item = {
@@ -467,11 +503,12 @@ const headers = [
     sortable: false,
     key: 'station.name',
   },
-  { title: 'نام مدیر', key: 'manager', align: 'end' },
-  { title: 'کد ملی مدیر', key: 'manager.national_code', align: 'end' },
-  { title: 'استان', key: 'station.province.title', align: 'end' },
-  { title: 'شهر', key: 'station.city.title', align: 'center' },
+  { title: 'نام مدیر', key: 'manager', align: 'start' },
+  { title: 'کد ملی مدیر', key: 'manager.national_code', align: 'start' },
+  { title: 'استان', key: 'station.province.title', align: 'start' },
+  { title: 'شهر', key: 'station.city.title', align: 'start' },
   { title: 'خطوط', key: 'lines', align: 'center' },
+  { title: 'آدرس', key: 'station.address', align: 'start' },
 ]
 const items = ref([])
 

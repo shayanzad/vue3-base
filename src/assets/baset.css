@@ -104,3 +104,10 @@ body {
 .swal2-modal {
   border-radius: 15px !important;
 }
+.v-data-table-header__content {
+  span {
+    color: #000000de;
+    font-weight: 600 !important;
+    font-size: 16px;
+  }
+}

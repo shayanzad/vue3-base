@@ -100,9 +100,9 @@ const router = createRouter({
           },
         },
         {
-          path: '/users/drivers',
+          path: '/drivers',
           name: 'users-drivers',
-          component: () => import('../views/users/drivers/list.vue'),
+          component: () => import('../views/drivers/list.vue'),
           meta: {
             title: ' فهرست راننده ها',
             guest: true,

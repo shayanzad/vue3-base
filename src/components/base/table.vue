@@ -1,12 +1,12 @@
 <!-- @format -->
 
 <template>
-  <div class="rounded-tl-2xl rounded-tr-2xl">
+  <div class="rounded-tl-2xl rounded-tr-2xl rounded-bl-2xl rounded-br-2xl">
     <!-- <div class="pb-4 flex justify-between items-center border-b-2 border-[rgba(239, 244, 255, 1)]">
       <div>{{ props.title }}</div>
       <slot name="header" />
     </div> -->
-    <div class="p-4 mb-2 bg-withe rounded-lg shadowLight">
+    <div class="p-4 mb-4 bg-withe rounded-2xl shadowLight">
       <slot name="actions" />
     </div>
     <div class=" ">
