@@ -43,23 +43,19 @@ const sideBarItems = ref([
       },
     ],
   },
-  {
-    title: 'راننده ها',
-    to: '',
-    icon: 'mdi-card-account-details-outline',
-    children: [
-      {
-        title: '  فهرست',
-        to: '/drivers/list',
-        icon: '',
-      },
-      // {
-      //   title: '  ثبت',
-      //   to: '/branches/list',
-      //   icon: '',
-      // },
-    ],
-  },
+  // {
+  //   title: 'راننده ها',
+  //   to: '',
+  //   icon: 'mdi-card-account-details-outline',
+  //   children: [
+  //     {
+  //       title: '  فهرست',
+  //       to: '/drivers/list',
+  //       icon: '',
+  //     },
+
+  //   ],
+  // },
   {
     title: 'نوبت ها',
     to: '',
@@ -85,13 +81,28 @@ const sideBarItems = ref([
     ],
   },
   {
-    title: ' اطلاعات پایه',
+    title: 'کاربران',
     to: '',
-    icon: 'mdi-book-cog-outline',
+    icon: 'mdi-account-group-outline',
     children: [
       {
-        title: 'فهرست کاربران',
-        to: '/base-information/users',
+        title: 'فهرست مدیران ایستگاه',
+        to: '/users/station-managers',
+        icon: '',
+      },
+      {
+        title: 'فهرست رانندگان',
+        to: '/users/drivers',
+        icon: '',
+      },
+      {
+        title: 'فهرست مدیران سیستم',
+        to: '/users/admins',
+        icon: '',
+      },
+      {
+        title: 'فهرست شرکت ها',
+        to: '/users/companies',
         icon: '',
       },
     ],

@@ -27,13 +27,22 @@ export const useGlobalStore = defineStore('menu', {
     },
     getRoleText() {
       let role = localStorage.getItem('role')
-      console.log(role)
       switch (role) {
         case '0':
           return 'ادمین'
 
         case '1':
           return 'شرکت مسافری'
+        case '2':
+          return '  مسافر'
+        case '3':
+          return '  راننده'
+        case '4':
+          return 'شرکت مسافری'
+        case '5':
+          return '  مدیر ایستگاه'
+        case '6':
+          return 'بدون نقش'
 
         default:
           break

@@ -211,7 +211,7 @@ import { useToast } from 'vue-toastification'
 import Swal from 'sweetalert2'
 import apiServices from '@/server/apiServices'
 
-import mapCompnent from '../../components/base/map.vue'
+import mapCompnent from '@/components/base/map.vue'
 const toast = useToast()
 const isLoading = ref(false)
 const showForm = ref(false)

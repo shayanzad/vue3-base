@@ -49,16 +49,16 @@ const router = createRouter({
             bredCroump: true,
           },
         },
-        {
-          path: '/drivers/list',
-          name: 'driversList',
-          component: () => import('../views/drivers/list.vue'),
-          meta: {
-            title: ' فهرست راننده ها',
-            guest: true,
-            bredCroump: true,
-          },
-        },
+        // {
+        //   path: '/drivers/list',
+        //   name: 'driversList',
+        //   component: () => import('../views/drivers/list.vue'),
+        //   meta: {
+        //     title: ' فهرست راننده ها',
+        //     guest: true,
+        //     bredCroump: true,
+        //   },
+        // },
         {
           path: '/turns/list',
           name: 'turnsList',
@@ -80,11 +80,41 @@ const router = createRouter({
           },
         },
         {
-          path: '/base-information/users',
-          name: 'base-information-users',
-          component: () => import('../views/base-information/users/list.vue'),
+          path: '/users/station-managers',
+          name: 'users-station-managers',
+          component: () => import('../views/users/station-managers/list.vue'),
           meta: {
-            title: 'کاربران',
+            title: 'مدیران ایستگاه',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/users/admins',
+          name: 'users-admins',
+          component: () => import('../views/users/admins/list.vue'),
+          meta: {
+            title: 'مدیران  سیستم  ',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/users/drivers',
+          name: 'users-drivers',
+          component: () => import('../views/users/drivers/list.vue'),
+          meta: {
+            title: ' فهرست راننده ها',
+            guest: true,
+            bredCroump: true,
+          },
+        },
+        {
+          path: '/users/companies',
+          name: 'users-companies',
+          component: () => import('../views/users/companies/list.vue'),
+          meta: {
+            title: ' فهرست شرکت ها',
             guest: true,
             bredCroump: true,
           },

@@ -12,8 +12,10 @@
     <div class=" ">
       <slot name="filtfers" />
     </div>
+
     <v-data-table
       v-model:expanded="expanded"
+      :return-object="props.returnObject ? true : false"
       v-model="rowSelected"
       :items="props.items"
       select-strategy="single"
@@ -124,6 +126,10 @@ const props = defineProps({
     required: false,
   },
   showExpand: {
+    type: Boolean,
+    required: false,
+  },
+  returnObject: {
     type: Boolean,
     required: false,
   },

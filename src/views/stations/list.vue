@@ -9,7 +9,8 @@
       @curentPage="getCurrentPage"
       @rowSelected="changeRowSelected"
       title="ایستگاه ها"
-      itemValue="id"
+      itemValue="station.id"
+      returnObject
       :customSlots="['lines', 'manager']"
     >
       <template #actions>
@@ -36,7 +37,7 @@
           <div class="ml-2">
             <v-tooltip location="bottom" text="ویرایش ایستگاه">
               <template v-slot:activator="{ props }">
-                <v-btn variant="text" v-bind="props">
+                <v-btn variant="text" v-bind="props" @click="openForm('edit')">
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -138,7 +139,7 @@
         <v-row>
           <v-col cols="12" md="4">
             <v-text-field
-              v-model="formModel.title"
+              v-model="formModel.name"
               label=" عنوان *"
               density="comfortable"
               variant="outlined"
@@ -146,12 +147,15 @@
           </v-col>
 
           <v-col cols="12" md="4">
-            <v-text-field
+            <v-autocomplete
               v-model="formModel.manager_national_code"
-              label="  کد ملی مدیر *"
+              label=" مدیر *"
+              :items="managerList"
               variant="outlined"
               density="comfortable"
-            ></v-text-field>
+              item-title="fullName"
+              item-value="national_code"
+            ></v-autocomplete>
           </v-col>
           <v-col cols="12" md="4">
             <v-autocomplete
@@ -274,13 +278,14 @@ const isLoading = ref(false)
 const loadingForm = ref(false)
 const showForm = ref(false)
 const rowSelected = ref([])
+const managerList = ref([])
 const line_list = ref([])
 const formModel = ref({
   id: null,
-  title: null,
+  name: null,
   manager_national_code: null,
-  province_id: 'خراسان رضوی',
-  city_id: 'مشهد',
+  province_id: null,
+  city_id: null,
   address: '',
   lat: '',
   lng: '',
@@ -324,12 +329,13 @@ const close = () => {
   showForm.value = false
   formModel.value = {
     id: null,
-    title: null,
-    // managerName: null,
+    name: null,
     manager_national_code: null,
-    province_id: 'خراسان رضوی',
-    city_id: 'مشهد',
-    address: 'مشهد',
+    province_id: null,
+    city_id: null,
+    address: '',
+    lat: '',
+    lng: '',
     lines: [],
   }
 }
@@ -337,11 +343,11 @@ const saveForm = () => {
   apiServices
     .Post('/v1/station/add', formModel.value)
     .then((res) => {
-      console.log(res)
-      items.value = res.data
-      // setTimeout(() => {
+      // items.value = res.data
       isLoading.value = false
-      // }, 1000)
+      close()
+      getStationsList()
+      toast.success('ایستگاه با موفقیت ثبت شد.')
     })
     .catch(() => {
       isLoading.value = false
@@ -389,6 +395,26 @@ const getStationsList = () => {
       isLoading.value = false
     })
 }
+const getManagerList = () => {
+  isLoading.value = true
+  apiServices
+    .Get('/v1/user/get')
+    .then((res) => {
+      res.data.forEach((element) => {
+        var item = {
+          birthdate: element.birthdate,
+          id: element.id,
+          fullName: element.name + ' ' + element.lastname,
+          national_code: element.national_code,
+          password: element.password,
+          phone: element.phone,
+          role: element.role,
+        }
+        managerList.value.push(item)
+      })
+    })
+    .catch(() => {})
+}
 const deleteItem = () => {
   showConfirmation()
 }
@@ -408,7 +434,7 @@ const showConfirmation = async () => {
 
     if (result.isConfirmed) {
       apiServices
-        .Post('/v1/station/delete', { id: rowSelected.value[0] })
+        .Post('/v1/station/delete', { station_id: rowSelected.value[0].station.id })
         .then((res) => {
           console.log(res)
           getStationsList()
@@ -461,6 +487,7 @@ const changeRowSelected = (val) => {
 onMounted(() => {
   getProvince()
   getStationsList()
+  getManagerList()
 })
 </script>
 <style scoped>

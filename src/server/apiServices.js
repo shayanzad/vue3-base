@@ -10,11 +10,12 @@ const apiClient = axios.create({
 })
 
 import { useToast } from 'vue-toastification'
+import { useRouter } from 'vue-router'
 
-const handleApiError = (error, inject) => {
+const handleApiError = (error) => {
   if (error.response) {
     const showToast = useToast()
-    const router = inject('router');
+    const router = useRouter()
 
     const status = error.response.status
     const message = error.response.data?.message || 'An error occurred'
